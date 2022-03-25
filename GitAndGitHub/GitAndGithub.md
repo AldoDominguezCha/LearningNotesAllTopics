@@ -76,6 +76,8 @@ NOTE: **Do not instantiate a new repo when you are already in an active repo** (
 
 Git tracks the base folder that we initialized as a repo (where we executed "git init") and also all subsequent nested folders inside that base folder.
 
+> "Dirty the working tree" &rarr; To add some modification, git notices there was a change in the tracked working directory.
+
 - ### Git commits
 
 We can think of a commit in Git as a "checkpoint". Once we have made changes in the set of files of the repository, we can then group some or all of them together into a commit. We could also say that a commit is a "version" or state of the set of files in the branch (timeline).
@@ -95,6 +97,32 @@ Write commit messages as if you were giving orders to the code base to change it
 > Atomic: Something irreducible, a base unit.
 
 When possible, a commit should encompass a single feature, change or fix. In other words, try to keep each commit focused on a single thing, **make atomic commits**.
+
+It's a good idea to follow the pattern of having the first line of the commit message as a summary for all the changes introduced.
+
+- ### .gitignore
+
+We can tell Git which files and directories to ignore in a given repository, such as dependency and packages folders, secrets, API keys and so on (information that should not be public in case we want to host a copy of our repo in GitHub) using a .gitignore file. This .gitignore file is normally placed at the root of the repo.
+
+<div style="page-break-after: always;"></div>
+
+- ### Git branches
+
+We can think of branches as alternative timelines for a project, alternative pathways or versions. They can diverge at a certain commit and represent "parallel realities".
+
+They enable us to create separate contexts where we can try new things, or even work on multiple ideas in parallel.
+
+> Whatever we do on one branch, will not impact other branches because they are different "timelines", unless we combine the branches, this is known in Git as the **merge** operation.
+
+In Git we are always working on a branch, the default branch with wich we start a repo after **git init** is known as the "master" branch, this branch is not special, doesn't do anything unique, it's just the git naming convention for the beginning branch.
+
+Usually, the master branch is designated as the "source of truth", the official working version of the project.
+
+> "Feature branching" is when we create a new branch based off the offical codebase, and work on a new feature in this new "feature branch" alone, if we are successful implementing the feature, then we can merge the feature branch into the official branch. This way we will not break the functioning version of the project. **It's a terrible idea to work directly in the main branch for a large project**.
+
+- ### Git HEAD
+
+> **HEAD** represents a reference to a branch pointer, and a branch pointer is simply where a branch currently is, a commit as a location. **HEAD** can also be understood as the current branch.
 
 <div style="page-break-after: always;"></div>
 
@@ -157,6 +185,8 @@ Add all files, both tracked and untracked (newly added files Git is just finding
 >> git add .
 ```
 
+<div style="page-break-after: always;"></div>
+
 - ### **git commit**
 
 Commit the changes present in the staging area.
@@ -185,13 +215,14 @@ Amend **last** commit, you can stage additional files before running the command
 >> git commit --amend "add exception handling middleware to the pipeline to manage null reference exception"
 ```
 
-<div style="page-break-after: always;"></div>
-
 Commit changes copying the authorship information (user and email) and commit message from a different commit, we need to provide the commit hash as a parameter after the "-C" flag:
 
 ```console
 >> git commit -a -C e85a9ff
 ```
+
+<div style="page-break-after: always;"></div>
+
 - ### **git log**
 
 List all commits in the branch, with their complete commit hash, message, authorship information and timestamp:
@@ -205,6 +236,8 @@ List all commits, but only the abbreviated commit hash and the first line of the
 ```console
 >> git log --oneline
 ```
+
+<div style="page-break-after: always;"></div>
 
 - ### **git branch**
 
@@ -232,12 +265,10 @@ Force delete a branch irrespective of its merge status. **Be careful with this o
 >> git branch --delete --force <branch-name>
 ```
 
-<div style="page-break-after: always;"></div>
-
 Rename the branch we are currently at, the "-m" flag stands for "move":
 
 ```console
->> git branch --move <new-branch-name>
+>> git branch -m <new-branch-name>
 ```
 
 <div style="page-break-after: always;"></div>
@@ -318,6 +349,82 @@ Take all uncommited changes (unstaged and staged) and stash them away in the sta
 ```console
 >> git stash save
 ```
+
+Remove the most recently stashed changes (top of the stash stack, "last in, first out") and reapply them to the working directory, in the current branch. **Remember that you can stash changes from a certain branch, switch to a different branch and then apply the changes there, may be helpful if you made some work in an unintended branch by accident**:
+
+```console
+>> git stash pop
+```
+
+List the entries present in the stash stack (all stashed changes, this is global for all branches):
+
+```console
+>> git stash list
+```
+
+Show the changes for a specific entry in the stash stack. Where **n** is the index in the stash:
+
+```console
+>> git stash show -p stash@{n}
+```
+
+Apply the changes for a specific entry in the stash stack. **Remember that you can stash changes from a certain branch, switch to a different branch and then apply the changes there, may be helpful if you made some work in an unintended branch by accident**:
+
+```console
+>> git stash apply stash@{n}
+```
+
+Drop the entire stash stack. **Remove all entries from the stack, make sure to apply the desired stashed changes before doing this**:
+
+```console
+>> git stash drop
+```
+
+<div style="page-break-after: always;"></div>
+
+Drop a specific entry in the stash stack. Where **n** is the index in the stash:
+
+```console
+>> git stash drop stash@{n}
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git switch**
+
+Switch to the specified branch:
+
+```console
+>> git switch <branch-name>
+```
+
+Create a new branch with the specified name and then switch to that new branch. The "-c" flag stands for "create":
+
+```console
+>> git switch -c <branch-name>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git checkout**
+
+> Just as a reminder, **git checkout** is kind of a legacy git command, it does too much, a wide variety of operations and this can be confusing to grasp, that's why **git switch** was added.
+
+Switch to the specified branch:
+
+```console
+>> git checkout <branch-name>
+```
+
+Create a new branch with the specified name and then switch to that new branch. The "-b" flag stands for "branch":
+
+```console
+>> git checkout -c <branch-name>
+```
+
+
+
+
 
 
 
