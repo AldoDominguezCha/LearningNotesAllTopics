@@ -1,0 +1,323 @@
+# Git and GitHub
+
+> Git is the world's most popular VCS (Version Control System), a version control system is software that tracks and manage changes to a set of files over time. Linus Torvald is the creator of Git.
+
+Version control systems such as Git generally allow:
+
+- Revisiting earlier versions of the files
+
+- Compare changes between versions (compare commits in the branch)
+
+- Undo changes and a whole lot more
+
+## What is Git?
+
+Is the version control software that runs locally on your machine. You don't need to register for an account, you don't need internet to use it. You can use Git without ever touching GitHub. We can use the command line to interact with Git, as an additional option we can use graphical interfaces (GitKraken for example) that in the background just execute the same commands.
+
+## What is GitHub?
+
+Is a service that hosts Git repositories in the cloud and makes it easier to collaborate with other people. You do need to sign up for an account to use GitHub. It's an online place to share work that is done using Git.
+
+## Some useful UNIX-based shell (like Git Bash) commands
+
+- pwd : Print current directory. As the name implies, it prints the current directory or location in the folder system.
+
+```console
+>> pwd
+```
+
+- cd : Change directory. It allows us to change directories (to move in the folder system).
+
+```console
+>> cd ../skinet/API
+```
+
+- start : Open specified directory in the file explorer. The ".." are used to go back a level. Most of these commands receive a relative path such as in the following example (from the current directory we are at, go backwards one level, then enter "skinet", then enter "Core", and finally enter "Interfaces", that's the directory that will be shown in the file explorer):
+
+```console
+>> start ../skinet/Core/Interfaces
+```
+
+- touch : Create a new file (yes, it has a weird name). You can pass multiple paths to the command in a single execution (following example creates 3 files in the previous directory because of the ".."):
+
+```console
+>> touch ../appsettings.json ../BaseEntity.cs ../.gitignore
+```
+
+- mkdir : Make directory. As the name implies, it creates a single or multiple directories.
+
+```console
+>> mkdir ../API/wwwroot ../Core/Entities ../Infrastructure/Data
+```
+
+- rm : Remove. Delete files or folders, to delete folders we must provide the "-rf" (recursive and force) flag.
+
+Deleting files:
+
+```console
+>> rm ../TestFile1.json ../TestFile2.json
+```
+
+Deleting folders (a single one in this case):
+
+```console
+>> rm -rf ./MyFolder1
+```
+
+<div style="page-break-after: always;"></div>
+
+## Git concepts and usage
+
+- ### Git repository
+
+A git repository or "repo" is a workspace which files are being tracked and managed by Git. Every repository has its own history (series of commits).
+
+NOTE: **Do not instantiate a new repo when you are already in an active repo** (check with "git status")
+
+Git tracks the base folder that we initialized as a repo (where we executed "git init") and also all subsequent nested folders inside that base folder.
+
+- ### Git commits
+
+We can think of a commit in Git as a "checkpoint". Once we have made changes in the set of files of the repository, we can then group some or all of them together into a commit. We could also say that a commit is a "version" or state of the set of files in the branch (timeline).
+
+<p align="center">
+    Work on stuff &rarr; Add changes to staging area (git add) &rarr; Commit (git commit)
+</p>
+
+**Write your commit messages in imperative mode ("make foo do frotz")**
+
+Write commit messages as if you were giving orders to the code base to change its behavior, in present-tense imperative mode.
+
+```console
+>> git commit -m "inject and use product repository in products controller"
+```
+
+> Atomic: Something irreducible, a base unit.
+
+When possible, a commit should encompass a single feature, change or fix. In other words, try to keep each commit focused on a single thing, **make atomic commits**.
+
+<div style="page-break-after: always;"></div>
+
+## Git commands
+
+- ### **git init**
+
+Initializes a new git repo, it created a new .git hidden folder in the location where the command is executed, which includes the files and metadata Git needs to work and track changes.
+
+```console
+>> git init
+```
+
+Output:
+
+```console
+Initialized empty Git repository in C:/Users/6112638/ECommerceAppWith.NETCoreAndAngular/StudentAssets/.git/
+```
+- ### **git status**
+
+Displays the state of the repository and staging area.
+
+```console
+>> git status
+```
+
+Output:
+
+```console
+On branch errorHandling
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   API/Controllers/ErrorController.cs
+        modified:   API/Startup.cs
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        API/Errors/ApiException.cs
+        API/Middleware/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git add**
+
+Adds files to the staging area, where they are ready to be commited.
+
+Add specific files by relative path to the staging area:
+
+```console
+>> git add ./API/Startup.cs ./Core/Interfaces/IGenericRespository.cs
+```
+
+Add all files, both tracked and untracked (newly added files Git is just finding about) to the staging area:
+
+```console
+>> git add .
+```
+
+- ### **git commit**
+
+Commit the changes present in the staging area.
+
+Commit changes without providing the commit message at the same time, the default text editor will be opened, prompting us to provide the commit message there:
+
+```console
+>> git commit
+```
+
+Commit changes providing the commit message with the "-m" flag:
+
+```console
+>> git commit -m "add exception handling middleware to the pipeline"
+```
+
+Staging all available changes and then comitting said changes, like using **git add** and **git commit** all at once:
+
+```console
+>> git commit -am "add endpoints to retrieve product types and product brands"
+```
+
+Amend **last** commit, you can stage additional files before running the command to include them in the commit, modify the commit message, or both:
+
+```console
+>> git commit --amend "add exception handling middleware to the pipeline to manage null reference exception"
+```
+
+<div style="page-break-after: always;"></div>
+
+Commit changes copying the authorship information (user and email) and commit message from a different commit, we need to provide the commit hash as a parameter after the "-C" flag:
+
+```console
+>> git commit -a -C e85a9ff
+```
+- ### **git log**
+
+List all commits in the branch, with their complete commit hash, message, authorship information and timestamp:
+
+```console
+>> git log
+```
+
+List all commits, but only the abbreviated commit hash and the first line of the commit message, it doesn't matter how long this message is:
+
+```console
+>> git log --oneline
+```
+
+- ### **git branch**
+
+List all available branches in the git repo. In the output, the '*' signals the one we are currently at:
+
+```console
+>> git branch
+```
+
+Create a new branch based on the current HEAD reference. **Do not use spaces in the branch name**:
+
+```console
+>> git branch <branch-name>
+```
+
+Delete a branch that has been merged. We won't be able to complete the operation if the branch hasn't been merged:
+
+```console
+>> git branch --delete <branch-name>
+```
+
+Force delete a branch irrespective of its merge status. **Be careful with this one**:
+
+```console
+>> git branch --delete --force <branch-name>
+```
+
+<div style="page-break-after: always;"></div>
+
+Rename the branch we are currently at, the "-m" flag stands for "move":
+
+```console
+>> git branch --move <new-branch-name>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git merge**
+
+Merge the changes from the branch which name we are providing, into the current branch. **The receiving or target branch is always the one we are placed at**:
+
+```console
+>> git merge <new-branch-name>
+```
+
+We have 3 types of merges
+
+- **Fast-forward merge**: We are just updating the HEAD reference of the original branch to "catch up" with the new one. The new or alternative branch hasn't diverged from the original branch, the original branch is only some commits behind this alternative or new branch, in this case, by merging the new branch, we are, in reality, just updating the HEAD of the original branch to point to the latest commit of the new or alternative branch, hence the name.
+
+- **Merge with commit**: The new or alternative branch has diverged from the original one, this means, we added new commits to the original branch after we created the alternative branch (where we most likely added new commits as well), but there are no conflicts to solve in any of the files between the two branches, so we'll just need to provide a merge commit message in the default text editor.
+
+- **Merge with conflicts**: The new or alternative branch has diverged from the original one, this means, we added new commits to the original branch after we created the alternative branch (where we most likely added new commits as well), and we have changes targetting the same line in one or multiple files between the branches (conflicts), we'll need to manually solve the conflicts, stage the files where we've solved a conflict and finally create a new commit to complete the merge.
+
+Resolving merge conflicts
+
+- Open the files with the merge conflicts.
+- Edit the files to remove the conflicts. Decide which branch's content you want to keep in each conflict, or keep the content from both if needed.
+- Remove the conflict markers in the document.
+- Add your changes and then make a commit to complete the merge.
+
+<div style="page-break-after: always;"></div>
+
+- ### **git diff**
+
+Show all unstaged changes only (from currently tracked files only), we can think of it as "what we could be adding into the staging area":
+
+```console
+>> git diff
+```
+
+Show all staged changes only, both the "--staged" and the "--cached" options work for this purpose, they are synonyms:
+
+```console
+>> git diff --staged
+```
+
+```console
+>> git diff --cached
+```
+
+Show all staged and unstaged changes (from currently tracked files only):
+
+```console
+>> git diff HEAD
+```
+
+Show the changes (unstaged, staged or both according to the option provided) for a specific file or folder:
+
+```console
+>> git diff --staged  <filepath/folderPath>
+```
+
+List the differences between commits using the HEAD synonym, the following example lists the difference between the third commit in the list (ordering from newest to oldest) and the most recent one, assuming that the HEAD reference is currently pointing at the latest commit of the branch. We can sort of translate it to "the difference between the parent of the parent of HEAD and HEAD". **Order of the references matters in git diff**:
+
+```console
+>> git diff HEAD~2 HEAD
+```
+
+List the differences between the latest commits of two different branches. The two dots between the branch names are just a convention, they are not necessary. **Order of the references matters in git diff**:
+
+```console
+>> git diff <branchName1>..<branchName2>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git stash**
+
+Take all uncommited changes (unstaged and staged) and stash them away in the stash stack, reverting said chages in the working directory, kind of "putting them away in a pouch", to be applied later, at a different branch even if we want to:
+
+```console
+>> git stash save
+```
+
+
+
