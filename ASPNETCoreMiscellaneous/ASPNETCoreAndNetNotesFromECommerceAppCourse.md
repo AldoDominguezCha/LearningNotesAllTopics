@@ -292,7 +292,7 @@ namespace Core.Specifications
 }
 ```
 
-Finally, using this specification in the Products controller, to retrieve a product by Id:
+Finally, using this specification in the Products controller, for both cases:
 
 ```csharp
 [HttpGet]
