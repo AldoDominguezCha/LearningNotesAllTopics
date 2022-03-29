@@ -317,3 +317,15 @@ public async Task<ActionResult<ProductToReturnDTO>> GetProduct(int id)
 
 <div style="page-break-after: always;"></div>
 
+## Deferred execution
+
+> Deferred execution means that an expression or query won't be evaluated until the query or expression is completed in its construction and its realized value is actually required. It improves performance by avoiding unnecessary execution.
+
+**I won't actually execute the query until I'm done adding all the filters, includes and additional conditions for retrieving only the desired information**
+
+- Query commands are stored in a variable
+- Execution of the query is deferred
+- IQueryable<T> creates an expression tree
+- Execution of the query actually takes place when executing ToList(), ToArray(), ToDictionary(), Count(), etc 
+
+
