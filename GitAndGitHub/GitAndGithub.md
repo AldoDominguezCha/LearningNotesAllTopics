@@ -122,7 +122,7 @@ Usually, the master branch is designated as the "source of truth", the official 
 
 - ### Git HEAD
 
-> **HEAD** represents a reference to a branch pointer, and a branch pointer is simply where a branch currently is, a commit as a location. **HEAD** can also be understood as the current branch.
+> **HEAD** represents a reference to a branch pointer, and a branch pointer is simply where a branch currently is, the last commit of the branch. **HEAD** can also be understood as the current branch.
 
 <div style="page-break-after: always;"></div>
 
@@ -419,8 +419,144 @@ Switch to the specified branch:
 Create a new branch with the specified name and then switch to that new branch. The "-b" flag stands for "branch":
 
 ```console
->> git checkout -c <branch-name>
+>> git checkout -b <branch-name>
 ```
+
+> Usually HEAD points to a specific branch reference, rather than a particular commit, and the branch reference itself points to the tip of the branch, the most recent commit on the branch.
+
+When we make a new commit, the branch reference is updated to reflect the new commit, to move the branch reference to the this new latest commit, the new tip of the branch. However, HEAD stays the same, cause it's pointing at the branch reference itself, HEAD is still just pointing at that branch.
+
+**This is all to say that HEAD usually refers to a branch, not a specific commit**
+
+Change HEAD to point to a particular commit rather than at the branch reference. **We are not officially on a branch, we are floating around in a detached HEAD state**. Kind of "revisiting the past" to examine the contents of the old commit:
+
+```console
+>> git checkout <commit-hash>
+```
+
+**Detached HEAD is not a bad thing despite the name**
+
+In detached HEAD state we have the following options:
+
+- Stay in detached HEAD to examine the contents of the old commit. Poke around, view files, etc.
+
+- Reattach the HEAD, which is to change HEAD to point again to a branch reference as it is usual, by changing back to any branch with **git switch <branch-name>** for example.
+
+- Branch off from that old commit by creating a new branch and switching to it. You can now add and commit changes because we've reattached HEAD by making it point to this new branch reference.
+
+<div style="page-break-after: always;"></div>
+
+Check out to an old commit in the current branch using HEAD as a reference. The next example checks out to the commit that is 2 places prior to HEAD, which at this point must be pointing to the branch reference, the last commit of the current branch (grand parent of the last commit, two commits before this last commit):
+
+```console
+>> git checkout HEAD~2
+```
+
+If you are in detached HEAD state (HEAD is pointing to a particular commit rather than a branch reference), reattach HEAD to the last branch reference before HEAD was detached (the same as switching back to the last branch you were in before detaching):
+
+```console
+>> git switch -
+```
+
+**Discard both staged and unstaged changes from one or multiple files**. We can think of it as checking out to the HEAD reference, but at that moment HEAD will be pointing to the branch refrence, which in turn will be poiting to the tip of the branch, the last commit in the branch, it's like **take me back to the last commit, and those unstaged and staged changes that get discarded are not part of that last commit**. As a note, the HEAD will bot be detached since we are checking out to HEAD itself, which is poitnting at the branch reference, not to a particular commit:
+
+```console
+>> git checkout HEAD <file1> <file2> <file3>
+```
+
+It's the exact same thing, but we can use **--** instead of **HEAD**:
+
+```console
+>> git checkout -- <file1> <file2> <file3>
+```
+
+Discard **both staged and unstaged changes** from all tracked files, **it doesn't remove untracked files**:
+
+```console
+>> git checkout HEAD .
+```
+
+Again, we can replace **HEAD** with **--**:
+
+```console
+>> git checkout -- .
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git restore**
+
+Discard **only unstaged** changes from one or multiple files:
+
+```console
+>> git restore <file1> <file2> <file3>
+```
+
+Discard **only unstaged** changes from all files, **it doesn't remove untracked files**:
+
+```console
+>> git restore .
+```
+
+Restore the contents of a file to its state from the specified commit (we can use the **HEAD~n** syntax or provide the commit hash):
+
+```console
+>> git restore --source HEAD~1 <file>
+```
+
+Unstage one or multiple files:
+
+```console
+>> git restore --staged <file1> <file2>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git reset**
+
+Reset the branch back to a specific commit, **the subsequent commits are gone, but the changes belonging to those discarded commits are kept as unstaged changes**, in case you want to keep something from the removed commits:
+
+```console
+>> git reset HEAD~<n>
+```
+
+You can use the abbreviated commit hash instead of the HEAD n parent syntax:
+
+```console
+>> git reset <commit-hash>
+```
+
+Reset the branch back to a specific commit, **also discarding the changes associated to those commits**:
+
+```console
+>> git reset --hard HEAD~<n>
+```
+
+You can use the abbreviated commit hash instead of the HEAD n parent syntax:
+
+```console
+>> git reset --hard <commit-hash>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git revert**
+
+Create a new commit which undoes the changes starting from a specified commit, **we use this as opposed to git reset to keep a full history of the changes, which is extremely important when collaborating**:
+
+```console
+>> git revert HEAD~<n>
+```
+
+You can use the abbreviated commit hash instead of the HEAD n parent syntax:
+
+```console
+>> git revert <commit-hash>
+```
+
+
+
+
 
 
 

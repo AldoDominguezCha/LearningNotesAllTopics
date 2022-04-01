@@ -317,7 +317,7 @@ public async Task<ActionResult<ProductToReturnDTO>> GetProduct(int id)
 
 <div style="page-break-after: always;"></div>
 
-## Deferred execution
+## Deferred execution and query building
 
 > Deferred execution means that an expression or query won't be evaluated until the query or expression is completed in its construction and its realized value is actually required. It improves performance by avoiding unnecessary execution.
 
@@ -327,5 +327,35 @@ public async Task<ActionResult<ProductToReturnDTO>> GetProduct(int id)
 - Execution of the query is deferred
 - IQueryable<T> creates an expression tree
 - Execution of the query actually takes place when executing ToList(), ToArray(), ToDictionary(), Count(), etc 
+
+This is an example on how we can build a query conditionally, to the base constructor (the constructor from the parent class), we need to provide a "criteria" (matching statement) lambda expression, but we need to build this lambda expression depending on the brandId and typeId parameters of our current constructor (whether we got a value for them or not), so we have the code to construct the lambda expression in the base constructor invocation, we use the **||** operator to conditionally build this type of expressions. If the left hand side of the statement evaluates to **true** then the right hand side of the statement gets ignored anf the piece of expression is not added, otherwise, our piece of lambda expression gets "appended", we can see how we added the **&&** operator to piece together the two conditional statements:
+
+```csharp
+public ProductsWithTypesAndBrandsSpecification(string sort, int? brandId, int? typeId)
+            : base( x=>
+                (!brandId.HasValue || x.ProductBrandId == brandId) &&
+                (!typeId.HasValue || x.ProductTypeId == typeId)
+            )
+        {
+            AddInclude(x => x.ProductType);
+            AddInclude(x => x.ProductBrand);
+            AddOrderBy(x => x.Name);
+            if(!string.IsNullOrEmpty(sort))
+            {
+                switch(sort) {
+                    case "priceAsc":
+                        AddOrderBy(x => x.Price);
+                        break;
+                    case "priceDesc":
+                        AddOrderByDescending(x => x.Price);
+                        break;
+                    default:
+                        AddOrderBy(x => x.Name);
+                        break; }
+            }
+        }
+```
+
+<div style="page-break-after: always;"></div>
 
 
