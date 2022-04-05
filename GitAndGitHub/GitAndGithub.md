@@ -203,7 +203,7 @@ Commit changes providing the commit message with the "-m" flag:
 >> git commit -m "add exception handling middleware to the pipeline"
 ```
 
-Staging all available changes and then comitting said changes, like using **git add** and **git commit** all at once:
+Staging all available changes and then comitting said changes, like using **git add** and **git commit** all at once, it doesn't stage untracked files:
 
 ```console
 >> git commit -am "add endpoints to retrieve product types and product brands"
@@ -514,7 +514,7 @@ Unstage one or multiple files:
 
 - ### **git reset**
 
-Reset the branch back to a specific commit, **the subsequent commits are gone, but the changes belonging to those discarded commits are kept as unstaged changes**, in case you want to keep something from the removed commits:
+Reset the branch back to a specific commit, **the subsequent commits are gone, but the changes belonging to those discarded commits are kept as unstaged changes**, in case you want to keep something from the removed commits, you can also use this to unstage all currently staged changes:
 
 ```console
 >> git reset HEAD~<n>
