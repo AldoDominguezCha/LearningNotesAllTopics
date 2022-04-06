@@ -17,6 +17,18 @@ With the **@NgModule** decorator, the class is marked as an angular module and i
 
 It's tricky to get Angular to work with jQuery, since jQuery is a DOM manipulation library, the DOM in our browser gets manipulated by jQuery, and Angular tracks changes in the DOM and reacts to those changes, Angular's change detection gets confused, to use Bootstrap with our Angular app, we can use Angular bootstrap (ngx-bootstrap), which is an npm package that provides Bootstrap components powered by Angular, like wrapping the famous ready-to-use Bootstrap components in Angular components.
 
+## Angular observables
+
+An observable is basically a sequence of items that arrive asynchronously over time
+
+| Promises | Angular observable |
+| ----------- | ----------- |
+| Has one pipeline | Are cancellable |
+| Tipically used with async data return | Stream data in multiple pipelines |
+| Not easy to cancel | Arrary like operations |
+| | Can be created from other sources like events |
+| | They can be subscribed to |
+
 <div style="page-break-after: always;"></div>
 
 ## Angular CLI commands

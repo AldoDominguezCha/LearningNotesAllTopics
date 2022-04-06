@@ -124,6 +124,14 @@ Usually, the master branch is designated as the "source of truth", the official 
 
 > **HEAD** represents a reference to a branch pointer, and a branch pointer is simply where a branch currently is, the last commit of the branch. **HEAD** can also be understood as the current branch.
 
+- ### Git remote
+
+Before we can push anything to Github, we need to tell Git about our remote repository on Github. We need to set up a "destination" to push the changes up to.
+
+In Git, we refer to these "destinations" as remotes.
+
+> Each remote is simply a URL where a hosted repository lives
+
 <div style="page-break-after: always;"></div>
 
 ## Git commands
@@ -554,9 +562,63 @@ You can use the abbreviated commit hash instead of the HEAD n parent syntax:
 >> git revert <commit-hash>
 ```
 
+<div style="page-break-after: always;"></div>
 
+- ### **git clone**
 
+Clone (get a local copy of) a remote repository hosted on Github or similar hosting service. Git will retrieve all files associated with the repository and will copy them to your local machine, Git also initializes a new repository on your machine, giving you access to the full Git history of the cloned project. **Make sure you are not already inside a git repo before cloning**. This command is not tied to Github exclusively, it will clone a repo hosted in GitLab or any other hosting service just fine:
 
+```console
+>> git clone <url>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git remote**
+
+> Remembering that a remote is a "destination" where we want to push our code to. Each remote is simply a URL where the hosted repository lives, each remote also has a name
+
+List any existing remotes for your repository, including the URL for the remote (the URL where the hosted repo lives). The "-v" flag stands for "verbose":
+
+```console
+>> git remote -v
+```
+
+A remote is really two things: a URL (where the hosted repo is located) and a label
+
+Add new remote to our local repository:
+
+```console
+>> git remote add <remote-name> <url>
+```
+
+Rename an existing remote:
+
+```console
+>> git remote rename <old-name> <new-name>
+```
+
+Remove an existing remote:
+
+```console
+>> git remote remove <remote-name>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git push**
+
+Push the specified local branch up to the specified remote, to its corresponding branch in the remote: 
+
+```console
+>> git push <remote> <local-branch>
+```
+
+Push the specified local branch up to the specified remote, but to the specified branch in the remote, as opposed to its corresponding one. This can be used to completely overwrite an old feature branch with the latest contents of the main branch, just to provide an example:
+
+```console
+>> git push <remote> <local-branch>:<remote-branch>
+```
 
 
 
