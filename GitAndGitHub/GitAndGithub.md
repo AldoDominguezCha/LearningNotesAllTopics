@@ -608,7 +608,7 @@ Remove an existing remote:
 
 - ### **git push**
 
-Push the specified local branch up to the specified remote, to its corresponding branch in the remote: 
+Push the specified local branch up to the specified remote, to its corresponding branch in the remote, **it will create a new corresponding branch in the remote if not present already**: 
 
 ```console
 >> git push <remote> <local-branch>
@@ -620,6 +620,11 @@ Push the specified local branch up to the specified remote, but to the specified
 >> git push <remote> <local-branch>:<remote-branch>
 ```
 
+Push the specified local branch up to the specified remote, to its corresponding branch in the remote, but also setting that remote branch as the upstream (default push to ranch in the remote) for the local branch, so in the future we can simply do **git push**, and by having configured this upstream for the local branch, git will know we actually want to push to the remote branch inside the remote we specified earlier. The "-u" flag stands for "upstream" (something like a default target and source):
+
+```console
+>> git push -u <remote> <local-branch>:<remote-branch>
+```
 
 
 
