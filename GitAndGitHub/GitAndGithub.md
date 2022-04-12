@@ -132,6 +132,18 @@ In Git, we refer to these "destinations" as remotes.
 
 > Each remote is simply a URL where a hosted repository lives
 
+- ### Remote Tracking Branches
+
+We can think of them as "At the time you last communicated with this remote repository, here is where the x branch was pointing"
+
+They follow the **\<remote\>/\<branch\>** pattern. Examples:
+
+* **origin/master** references the state of the master branch on the remote repo named origin
+
+* **upstream/logoRedesign** references the state of the logoRedesign branch on the remote repo named upstream (a common remote name)
+
+
+
 <div style="page-break-after: always;"></div>
 
 ## Git commands
@@ -253,6 +265,12 @@ List all available branches in the git repo. In the output, the '*' signals the 
 
 ```console
 >> git branch
+```
+
+List all available remote branches (all branches in all remotes registered for the local repo, we must remember that a "remote" is a destination, a hosting URL, both a target and a source):
+
+```console
+>> git branch --remote
 ```
 
 Create a new branch based on the current HEAD reference. **Do not use spaces in the branch name**:
@@ -566,7 +584,9 @@ You can use the abbreviated commit hash instead of the HEAD n parent syntax:
 
 - ### **git clone**
 
-Clone (get a local copy of) a remote repository hosted on Github or similar hosting service. Git will retrieve all files associated with the repository and will copy them to your local machine, Git also initializes a new repository on your machine, giving you access to the full Git history of the cloned project. **Make sure you are not already inside a git repo before cloning**. This command is not tied to Github exclusively, it will clone a repo hosted in GitLab or any other hosting service just fine:
+Clone (get a local copy of) a remote repository hosted on Github or similar hosting service. Git will retrieve all files associated with the repository and will copy them to your local machine, Git also initializes a new repository on your machine, giving you access to the full Git history of the cloned project. **Make sure you are not already inside a git repo before cloning**. This command is not tied to Github exclusively, it will clone a repo hosted in GitLab or any other hosting service just fine.
+
+As an additional note, when cloning a remote repository, the remote added to the local copy is named as **\"origin\"**:
 
 ```console
 >> git clone <url>
