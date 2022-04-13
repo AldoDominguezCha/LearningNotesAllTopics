@@ -430,6 +430,12 @@ Create a new branch with the specified name and then switch to that new branch. 
 >> git switch -c <branch-name>
 ```
 
+Create a new local branch (if not present in your local repository already) from the remote branch of the same name. **Basically "grabbing" a copy of a branch in the remote that we don't have local access to yet, of course this new local copy of the branch gets paired with its remote equivalent**:
+
+```console
+>> git switch <remote-branch-name>
+```
+
 <div style="page-break-after: always;"></div>
 
 - ### **git checkout**
@@ -469,6 +475,16 @@ In detached HEAD state we have the following options:
 - Reattach the HEAD, which is to change HEAD to point again to a branch reference as it is usual, by changing back to any branch with **git switch <branch-name>** for example.
 
 - Branch off from that old commit by creating a new branch and switching to it. You can now add and commit changes because we've reattached HEAD by making it point to this new branch reference.
+
+<div style="page-break-after: always;"></div>
+
+- ### **git checkout**
+
+Create a new local branch (if not present in your local repository already) from the remote branch of the same name. **Basically "grabbing" a copy of a branch in the remote that we don't have local access to yet, of course this new local copy of the branch gets paired with its remote equivalent**. This does exactly the same as "git switch \<remote-branch-name\>", it's just the "older" way, remebering that **get checkout** used to do so many things:
+
+```console
+>> git checkout --track <remote-branch-name>
+```
 
 <div style="page-break-after: always;"></div>
 
