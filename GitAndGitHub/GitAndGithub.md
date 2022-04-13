@@ -662,7 +662,15 @@ Push the specified local branch up to the specified remote, to its corresponding
 >> git push -u <remote> <local-branch>:<remote-branch>
 ```
 
+<div style="page-break-after: always;"></div>
 
+- ### **git fetch**
+
+Get the latest information about a remote repository (**new commits for the branches and new branches that may have been added**), without actually integrating the changes into your working directory. **It only updates remote tracking branches, it will not affect our actual local branches**. For example, this command will update the history in a remote tracking branch so that we know that our local branch is some commits behind its corresponding remote branch, possibly due to the work of a collaborator:
+
+```console
+>> git fetch <remote>
+```
 
 
 
