@@ -721,3 +721,21 @@ Pull the latest state of the remote branch and **merge** it into the current bra
 ```console
 >> git pull <remote> <remote-branch>
 ```
+
+<div style="page-break-after: always;"></div>
+
+## Git collaboration workflows
+
+- Centralized workflow: Everybody is working in the exact same branch (master, main, whatever name it may have). **This is a terrible idea for complex projects and fairly large teams**
+
+  - No one can work on anything without disturbing the main codebase. How do you experiment, adding risky commits if you are working on the official branch directly, which is the only one available?
+  - The only way to collaborate on a feature together with a teammate is to push incomplete code to the master or main branch. Everybody else working on the project now has broken code...
+  - Lots of time spent resolving conflicts and merging code, especially as team size scales up
+
+- Using feature branches. **This one is the way to go for a serious project, NOBODY WORKS DIRECTLY IN THE MAIN BRANCH, THAT'S THE SOURCE OF TRUTH**
+
+  - Treat the main branch as the official project history
+  - Multiple teammates can collaborate on a single feature and share code back and forth without polluting the main branch of the project
+  - The main branch will not contain broken code unless someone messes up
+  - A feature branch is only merged into the main branch after a code review process and after it has passed integration tests, this means all the work in the feature branch is completed and the changes are functional
+  - **Before creating a new feature branch off of the main branch, we always have to do git pull \<remote-name\> \<remote-main-branch-name\> to make sure we have the latest version of the main branch**
