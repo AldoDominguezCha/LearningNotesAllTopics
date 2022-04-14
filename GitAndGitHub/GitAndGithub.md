@@ -690,7 +690,7 @@ Get the latest information about a specific branch in the remote repository (**n
 
 - ### **git pull**
 
-> 
+> It's not recommended to execute **git pull** having uncommited work. It's a better idea to work on our changes, commit them, then pulling all that's available in the remote branch that may not be on our local corresponding branch (some collaborator's work), solving the merge conflicts if any, adding the merge commit and then finally push the branch to the remote. So basically, work on your stuff, commit those changes when ready, pull your teammates changes if any for the branch and solve any possible merge conflict, then push this final version of the branch  
 
 Pull the latest state of the remote branch and **merge** it into the current branch, unlike **git fetch**, this one will actually alter our local branch, since it will integrate the latest commits from the remote branch into the branch we are currently at. If there's any conflict in the files, we'll just have to solve it the same way when there's a conflict merging local branches. **REMEMBER : The target branch for the merge is the one we are currently at, be careful with that**:
 
