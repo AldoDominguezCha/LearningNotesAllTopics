@@ -142,7 +142,13 @@ They follow the **\<remote\>/\<branch\>** pattern. Examples:
 
 * **upstream/logoRedesign** references the state of the logoRedesign branch on the remote repo named upstream (a common remote name)
 
+<div style="page-break-after: always;"></div>
 
+- ### Git repository visibility
+
+> **Public**: Public repos are accessible to everyone in the internet. Anyone can acces, view and clone a public repository. **It doesn't mean anyone is able to modify the contents of your Github repo**. If someone wanted to push changes into a Github repo you own, you need to grant them collaborator permissions first.
+
+> **Private**: Private repos are not discoverable by default, they can only be viewed and accessed by the owner and the people that have been granted access.
 
 <div style="page-break-after: always;"></div>
 
