@@ -150,6 +150,24 @@ They follow the **\<remote\>/\<branch\>** pattern. Examples:
 
 > **Private**: Private repos are not discoverable by default, they can only be viewed and accessed by the owner and the people that have been granted access.
 
+- ### Git README files
+
+README files are used to communicate important information about a repository, including:
+
+- What the project does
+- How to run the project
+- Why it's noteworthy (the perks and innovations of that package, framework, etc)
+- Who maintains the project
+
+READMEs are markdown files (**they have an \'.md\' extension**). Markdown is a lightweight markup language that provides a simple and convenient syntax to generate formatted text. It's a text-to-HTML conversion tool.
+
+Github will actually look in the root of the repository for the **README.md** file, and it will render it in the main page of the respository. It's always a good idea adding a README file to every public repo, since recruiters and other people will be able to obtain a summary of our projects, giving it a professional look.
+
+- ### Git gists
+
+Github gists are a simple way to share code snippets and useful fragments with others.
+
+
 <div style="page-break-after: always;"></div>
 
 ## Git commands
