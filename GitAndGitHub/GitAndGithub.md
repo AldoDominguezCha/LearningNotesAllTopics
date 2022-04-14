@@ -486,6 +486,12 @@ Create a new local branch (if not present in your local repository already) from
 >> git checkout --track <remote-branch-name>
 ```
 
+Change HEAD to point to the tip of the remote tracking branch, entering detached HEAD state, this is most useful after using **git fetch \<remote-name\>**, to take a peek into the latest changes integrated in that remote branch, remembering that **git fetch** will get the latest information about the remote, without actually pulling those changes into our working local copy of the repo, so we are "taking a peek" into the most recent state of the remote branch:
+
+```console
+>> git checkout <remote-name>/<remote-branch-name>
+```
+
 <div style="page-break-after: always;"></div>
 
 Check out to an old commit in the current branch using HEAD as a reference. The next example checks out to the commit that is 2 places prior to HEAD, which at this point must be pointing to the branch reference, the last commit of the current branch (grand parent of the last commit, two commits before this last commit):
@@ -666,12 +672,28 @@ Push the specified local branch up to the specified remote, to its corresponding
 
 - ### **git fetch**
 
+> It can be summarized as, go fetch the latest information on the state of the remote repository (we can fetch the latest state of the whole remote or only one branch of said remote), but **DON'T** actually pull those changes into my local copy. Just go see if any additional commits or branches have been added in the remote history that we don't know of yet, most likely by a collaborator. **This will only update the known state of the remote and its branches, fetching the latest version of its history (set of commits and available branches), it will not touch our local repo** 
+
 Get the latest information about a remote repository (**new commits for the branches and new branches that may have been added**), without actually integrating the changes into your working directory. **It only updates remote tracking branches, it will not affect our actual local branches**. For example, this command will update the history in a remote tracking branch so that we know that our local branch is some commits behind its corresponding remote branch, possibly due to the work of a collaborator:
 
 ```console
 >> git fetch <remote>
 ```
 
+Get the latest information about a specific branch in the remote repository (**new commits for said remote branch that may have been added by a collaborator**), without actually integrating the changes into your local copy of the branch:
 
+```console
+>> git fetch <remote> <remote-branch-name>
+```
 
+<div style="page-break-after: always;"></div>
 
+- ### **git pull**
+
+> 
+
+Pull the latest state of the remote branch and **merge** it into the current branch, unlike **git fetch**, this one will actually alter our local branch, since it will integrate the latest commits from the remote branch into the branch we are currently at. If there's any conflict in the files, we'll just have to solve it the same way when there's a conflict merging local branches. **REMEMBER : The target branch for the merge is the one we are currently at, be careful with that**:
+
+```console
+>> git pull <remote> <remote-branch>
+```
