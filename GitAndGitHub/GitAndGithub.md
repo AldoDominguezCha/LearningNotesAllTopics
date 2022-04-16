@@ -738,4 +738,44 @@ Pull the latest state of the remote branch and **merge** it into the current bra
   - Multiple teammates can collaborate on a single feature and share code back and forth without polluting the main branch of the project
   - The main branch will not contain broken code unless someone messes up
   - A feature branch is only merged into the main branch after a code review process and after it has passed integration tests, this means all the work in the feature branch is completed and the changes are functional
-  - **Before creating a new feature branch off of the main branch, we always have to do git pull \<remote-name\> \<remote-main-branch-name\> to make sure we have the latest version of the main branch**
+
+
+
+### Working with feature branches
+
+**Before creating a new feature branch off of the main branch, we always have to do git pull \<remote-name\> \<remote-main-branch-name\> to make sure we have the latest version of the main branch**
+
+> Pull Request: For short known as \"PR\", is a feature built into remote repository hosting services like Github and Azure. **It's not native to git itself**. A PR allows developers to alert team-members about new work that needs to be reviewed. It provides a mechanism to approve or reject the work on a given branch, facilitating discussion and feedback on the specified commits.
+
+A PR is basically "I have this new stuff I want to merge into the master branch...what do you all think about it?"
+
+The workflow to work using a PR is:
+
+1. From the main branch, **having pulled the latest version**, create your feature branch
+2. Add your changes in your local feature branch
+3. Push the feature branch to Github
+4. Open a pull request using the feature branch you pushed to Github
+5. Wait for the PR to be approved and merged, pay attention to the discussion related to the changes
+
+<div style="page-break-after: always;"></div>
+
+### The fork and clone workflow
+
+Github and other repository hosting services allow us to create personal copies of other people's public repositories or even a private one provided we have access to it. We call those copies a "fork" of the original.
+
+When we fork a repo, we're basically asking Github "make me my own copy of this repo, please". As with pull requests, forking is not a git feature, the ability to fork is implemented by the hosting service, e.g., Github. When getting a fork of someone else's repo, the history of the original repo is kept, we can see the entire list of commits.
+
+The "fork and clone" workflow is most used in open-source projects with hundreds or even thousands of contributors. In this scenario, we don't have direct contributor status for the repository, a basic overview of this workflow is as follows:
+
+1. We create a fork (our own copy to which we can do anything we want) of the original repo to which we want to contribute but we can't do so directly
+
+2. We clone **OUR FORK** of the project, we'll be pushing our changes to our forked copy, since we can't do that to the original repo where we want to contribute
+
+3. We add a remote for the original repo from which we created the fork, we do this to use **git pull** and obtain the latest changes for the original project easily, **SINCE OUR FORKED COPY WILL NOT BE AUTOMATICALLY UPDATED WITH THE LATESTS COMMITS OF THE ORIGINAL REPO**, our forked repo and the original repo are not in sync, after the fork operation they are completely separated
+
+4. We create a feature branch in our local repository, the one we obtained by cloning our fork of the project **and we pull the latest changes FROM THE ORIGINAL REPOSITORY**
+
+5. After we have added an tested our changes in the feature branch of the local repo, we push the changes to our fork
+
+6. We create a pull request from the feature branch of our fork, targeting the main branch of the project in the original repo
+
