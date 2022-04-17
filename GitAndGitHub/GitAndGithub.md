@@ -724,6 +724,29 @@ Pull the latest state of the remote branch and **merge** it into the current bra
 
 <div style="page-break-after: always;"></div>
 
+- ### **git rebase**
+
+To combine two branches together, as an alternative to merging, we can "rebase" the original branch, this moves the entire feature branch so that it begins at the tip of the target branch, **WE'LL REBASE THE BRANCH WHICH NAME WE PROVIDE IN THE COMMAND, ADDING AT THE TIP THE COMMITS OF THE BRANCH WE ARE CURRENTLY AT**, so we basically want to be placed in our feature branch where we've added the changes.
+
+Instead of using a merge commit, rebasing rewrites history by creating new commits for each of the original feature branch commits. This command will ignore the merge commits we have in our feature branch caused by trying to keep up with the updates of the master branch, for example, and will only recreate at the end of the target branch the commits of the feature branch in which we actually introduced changes.
+
+**WARNING**: never rebase with commits that have been shared with others, you only want to rebase with commits that you have in your local repo and other people don't, it's safe to do with the commits in your local feature branches for example. **THIS BASICALLY MEANS, DO NOT ALTER OTHER PEOPLE'S PAST HISTORY, DO NOT RECREATE THE COMMITS IN THE MAIN BRANCH THAT EVERYBODY HAS**:
+
+```console
+>> git switch <feature-branch>
+>> git rebase <target-branch> (most likely the main branch)
+```
+
+Clean up the history with interactive rebase, we pick a certain commit in the branch from which we want to remake the commits that follow after by applying an operation to one or more commits in the range we have specified. We can rename commits, merge commits together (keep changes for all commits but combining said changes into a single commit, reducing the length of the history in the branch) and even **drop commits, thus discarding the changes related with that commit, so be careful with that option**:
+
+**HEAD~(n)** &rarr; From which commit we are going to rebase our own branch using the commits encompassed in that same range, something like "reconstruct starting from this commit"
+
+```console
+>> git rebase -i HEAD~(n)
+```
+
+<div style="page-break-after: always;"></div>
+
 ## Git collaboration workflows
 
 - Centralized workflow: Everybody is working in the exact same branch (master, main, whatever name it may have). **This is a terrible idea for complex projects and fairly large teams**
