@@ -432,6 +432,8 @@ Drop the entire stash stack. **Remove all entries from the stack, make sure to a
 
 <div style="page-break-after: always;"></div>
 
+- ### **git stash**
+
 Drop a specific entry in the stash stack. Where **n** is the index in the stash:
 
 ```console
@@ -516,8 +518,6 @@ Change HEAD to point to the tip of the remote tracking branch, entering detached
 >> git checkout <remote-name>/<remote-branch-name>
 ```
 
-<div style="page-break-after: always;"></div>
-
 Check out to an old commit in the current branch using HEAD as a reference. The next example checks out to the commit that is 2 places prior to HEAD, which at this point must be pointing to the branch reference, the last commit of the current branch (grand parent of the last commit, two commits before this last commit):
 
 ```console
@@ -529,6 +529,16 @@ If you are in detached HEAD state (HEAD is pointing to a particular commit rathe
 ```console
 >> git switch -
 ```
+
+Chekout to a specific commit in the branch using the tag for that commit as an alias, should the target commit have a tag. Doing this will take us to detached HEAD state, since we are making HEAD point to a particular commit instead of a branch reference as it is the normal state:
+
+```console
+>> git checkout <tag-for-commit>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git checkout**
 
 **Discard both staged and unstaged changes from one or multiple files**. We can think of it as checking out to the HEAD reference, but at that moment HEAD will be pointing to the branch refrence, which in turn will be poiting to the tip of the branch, the last commit in the branch, it's like **take me back to the last commit, and those unstaged and staged changes that get discarded are not part of that last commit**. As a note, the HEAD will bot be detached since we are checking out to HEAD itself, which is poitnting at the branch reference, not to a particular commit:
 
@@ -743,6 +753,24 @@ Clean up the history with interactive rebase, we pick a certain commit in the br
 
 ```console
 >> git rebase -i HEAD~(n)
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git tag**
+
+> As a note, a tag is always pointing to a particular commit, it's tied only to that single commit
+
+Show the list of all tags present for the current repository without any additional information:
+
+```console
+>> git tag
+```
+
+List all tags that match the provided wildcard pattern. For example, we can provide **\"\*beta\*\"** to get all the tags containing the substring \"beta\" at any point. The **'l'** flag stands for "list", it's a bit redundant, but we do have to use it if we want to provide a matching pattern:
+
+```console
+>> git tag -l <matching-pattern> ("*beta*" for example, to get all tags that contain the substring "beta" at any point)
 ```
 
 <div style="page-break-after: always;"></div>
