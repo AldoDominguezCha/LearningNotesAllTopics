@@ -392,6 +392,16 @@ List the differences between the latest commits of two different branches. The t
 
 <div style="page-break-after: always;"></div>
 
+- ### **git diff**
+
+List the differences between two commits referring to said commits using their related tag if exists:
+
+```console
+>> git diff <tag-for-first-commit> <tag-for-second-commit> (git diff v16.14.0 v17.0.0 as an example)
+```
+
+<div style="page-break-after: always;"></div>
+
 - ### **git stash**
 
 Take all uncommited changes (unstaged and staged) and stash them away in the stash stack, reverting said chages in the working directory, kind of "putting them away in a pouch", to be applied later, at a different branch even if we want to:
@@ -759,7 +769,13 @@ Clean up the history with interactive rebase, we pick a certain commit in the br
 
 - ### **git tag**
 
-> As a note, a tag is always pointing to a particular commit, it's tied only to that single commit
+> As a note, a tag is always pointing to a particular commit, it's tied only to that single commit. A tag is simply a "sticky note" in a commit, most likely used to mark every commit as a release (major, minor and patch release, according to the semantic versioning convention)
+
+There are two types of git tags: lightweight and annotated tags.
+
+**Lightweight tags:** They are...lightweight. They are just a name/label that points to a particular commit.
+
+**Annotated tags:** They store some additional meta data, including the author's name and email, the date, and a tagging message (like a commit message).
 
 Show the list of all tags present for the current repository without any additional information:
 
@@ -771,6 +787,52 @@ List all tags that match the provided wildcard pattern. For example, we can prov
 
 ```console
 >> git tag -l <matching-pattern> ("*beta*" for example, to get all tags that contain the substring "beta" at any point)
+```
+
+Create a **lightweight** tag referring to the commit that HEAD is referencing:
+
+```console
+>> git tag <tagname>
+```
+
+Create an **annotated** tag referring to the commit that HEAD is referencing. We'll be prompted to provide the tag message in the default text editor, similar to the commit message when we don't provide the message as a parameter to the command. The **-a** flag stands for "annotated":
+
+```console
+>> git tag -a <tagname>
+```
+
+Create an **annotated** tag referring to the commit that HEAD is referencing. We can provide the tag message directly to the command, similar to a commit message, using the **\'-m\'** flag (which stands for "message"):
+
+```console
+>> git tag -a <tagname> -m <tag-message>
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### **git tag**
+
+Create a tag for a previous commit, **it can be either lightweight or annotated**. We just have to target that commit using the commit hash:
+
+```console
+>> git tag -a <tagname> <commit-hash> -m <tag-message> (this example is for an annotated tag)
+```
+
+Delete a specific tag, **it can be either lightweight or annotated**:
+
+```console
+>> git tag -d <tagname>
+```
+
+**By default, git push does not transfer tags in our local repo to the remote server, we need to explicitly ask for this**. Push all tags in our local branch to the remote branch, by using the **--tags** option:
+
+```console
+>> git push <remote-name> <branch-name> --tags
+```
+
+View the details about a tag. If the tag is an annotated tag, it will show the tagger's info (username and email), tag creation date, tag message, and the info for the commit related to the tag:
+
+```console
+>> git show <tagname>
 ```
 
 <div style="page-break-after: always;"></div>
