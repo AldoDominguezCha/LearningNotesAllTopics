@@ -167,6 +167,75 @@ Github will actually look in the root of the repository for the **README.md** fi
 
 Github gists are a simple way to share code snippets and useful fragments with others.
 
+- ### Git behind the scenes
+
+**The config file**
+
+> For every git repo, we can find a hidden .git folder, that's what identifies such directory as a git repo
+
+In the .git folder, we can find the config file, which holds the settings that are applied to the repository (we can also find a config file with global scope elsewhere in our computer), in this local config file we can for example modify the colors that are used to display the names of the local branches in the repository.
+
+In the .git folder we can also find the "refs" folder (stands for "references"), as the name already implies, here is where git stores the references for the local branches, the remotes and the tags. If we navigate to the "heads" folder of refs, we'll find a file for every local branch that we have in the repo (having the same name as the branch), inside every branch head file we'll simply find the commit hash of where that particular branch reference is pointing, the "tip" of the branch.
+
+<div style="page-break-after: always;"></div>
+
+- ### Git behind the scenes
+
+**The HEAD file in the .git directory**
+
+This file contains the reference of where, I, as the user, am placed in the repository. If we are placed inside a certain branch as it is usual, this HEAD file will contain a reference to a branch.
+
+In this case, we are placed normally in a local branch of the repository. If we consult the contents of the HEAD file:
+
+```console
+>> cat .git/HEAD
+```
+
+**Output**
+
+```console
+>> ref: refs/heads/master
+```
+
+If we have checked out to a particular commit, **it means we are in detached HEAD state** (where HEAD points to a singular commit rather than a branch reference). Then by consulting the contents of HEAD we can appreciate the difference:
+
+```console
+>> cat .git/HEAD
+```
+
+**Output**
+
+```console
+>> 3739879d657f9680cba96ba36f508839465873e3
+```
+
+<div style="page-break-after: always;"></div>
+
+- ### Git behind the scenes
+
+**The objects folder**
+
+Inside the .git folder, we can find the "objects" folder, which contains **4** types of git objects: **commits**, **trees**, **blobs** and **annotated tags**. The contents in this "objects" folder are encrypted and compressed, so what's inside is not human-readable.
+
+**Hashing functions**
+
+Hashing functions are functions that map input data of some arbitrary size to fixed-size output values.
+
+As a subset of hashing functions, we can find cryptographic hash functions, which have the following qualities:
+
+1. One-way function which is infeasible to invert.
+
+2. Small change in input yields large change in the output.
+
+3. Deterministic - same input yields same output.
+
+4. Unlikely to find two outputs with the same value.
+
+At the moment of writing this, git uses a cryptographic hashing function called SHA-1 (this could change in the future). SHA-1 always generates 40-digit hexadecimal numbers, the commit hashes we see all the time in git are the output of this SHA-1 function.
+
+**Git as key-value datastore**
+
+Git is a **key-value** data store. We can insert any kind of content into a git repository, and git will hand us back a unique key we can later use to retrieve that content. These keys that we get back are SHA-1 checksums. 
 
 <div style="page-break-after: always;"></div>
 
