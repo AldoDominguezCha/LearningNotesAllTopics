@@ -1065,6 +1065,8 @@ e66ae76 master@{5}: commit: add content on git tags to the git guide
 
 In this case, we have asked for the reference logs of the master branch, we can see how this branch reference gets updated every time we add a new command to it, since this branch reference must now point to that latest commit.
 
+**We can sometimes use the git reflog entries to access commits that seem lost and are not appearing in git log anymore.**
+
 <div style="page-break-after: always;"></div>
 
 ## Git reflogs
@@ -1099,6 +1101,63 @@ Every entry in the reference logs has a timestamp associated with it, we can fil
 ```
 
 In this case, the **master@{2.days.ago}** reflog entry referenced will be the one closest to that two weeks period. So it's like asking "where were you, the reference, pointing at, this amount of time ago?".
+
+<div style="page-break-after: always;"></div>
+
+## Git reflogs
+
+**Undoing a rebase on a branch with git reflog**
+
+Imagine we have squashed together several commits we did on a branch, but then we decide we'd actually like to have access to all the original single commits. If we consulted the reference logs for such a branch, we'd see something like this:
+
+```console
+485dc8b (HEAD -> flowers) flowers@{0}: rebase (finish): refs/heads/flowers onto 18fa4e84a22278cb88fe2a2eea699bd2464bd7e3
+2d1720b flowers@{1}: rebase (finish): refs/heads/flowers onto cc423e61e5c81ea6c5702901e72f599483c4021b
+da2ad69 flowers@{2}: commit: add celosia
+aa18b2d flowers@{3}: commit: add amaranth to flowers
+112b8a9 flowers@{4}: commit: add dahlias to flowers list
+73a1229 flowers@{5}: commit: add some zinnias
+cc423e6 flowers@{6}: commit: add flowers file
+18fa4e8 (master) flowers@{7}: branch: Created from HEAD
+```
+
+We can see we created the branch, added some commits to it, and then we performed two different rebase operations on the branch, squashing some of the commits together. By consulting the list of commits for the branch (**git log --oneline**) we now have the following:
+
+```console
+485dc8b (HEAD -> flowers) add list of flower seeds
+18fa4e8 (master) add summer seeds
+46a5da8 add more greens
+97f08b7 plant winter veggies
+191e903 add veggies file
+```
+
+In that latest commit of the branch is where we have squashed together different individual commits, we'd like to get our separated original commits back in the branch's history. Then by looking in the reference logs for the branch, as we have done already, we can get "from the trash" sort of speak, the latest original commit before rebasing, it's the **flowers@{2}** git reference log entry for the branch, then we can apply a reset using that reference for the commit (we could also use the abbreviated hash we can also see in the reflog list, "da2ad69" specifically):
+
+```console
+git reset --hard flowers@{2} (the same as git reset --hard da2ad69, this would be using the commit's hash instead of its reflog reference) 
+```
+
+<div style="page-break-after: always;"></div>
+
+## Git reflogs
+
+**Undoing a rebase on a branch with git reflog**
+
+Now, if we consulted again the list of commits for the branch (**git log --oneline**), we'd see that we have "saved" those individual commits we previously squashed together:
+
+```console
+da2ad69 (HEAD -> flowers) add celosia
+aa18b2d add amaranth to flowers
+112b8a9 add dahlias to flowers list
+73a1229 add some zinnias
+cc423e6 add flowers file
+18fa4e8 (master) add summer seeds
+46a5da8 add more greens
+97f08b7 plant winter veggies
+191e903 add veggies file
+```
+
+**We have effectively undone the rebase operation on the branch with the aid of the reference logs, by "retrieving" a "discarded" commit.**
 
 <div style="page-break-after: always;"></div>
 
