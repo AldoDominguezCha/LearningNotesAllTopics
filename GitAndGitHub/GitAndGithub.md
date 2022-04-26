@@ -1042,6 +1042,66 @@ The "fork and clone" workflow is most used in open-source projects with hundreds
 
 <div style="page-break-after: always;"></div>
 
+## Git reflogs
+
+Git reflogs (git reference logs) are records of when the tips of branches and other references (our HEAD, for example) are updated in the repository. To better illustrate this, let's provide an example, we have at our disposal the **git reflog** command, with the **show** subcommand, if we want to list the movements, that's to say, the updates for a reference, a branch for example, we can go:
+
+```console
+>> git reflog show master
+```
+
+With the following output for a certain repository:
+
+```console
+171d96c (HEAD -> master, origin/master, origin/HEAD) master@{0}: commit: add content on git aliases to the git guide
+c934e12 master@{1}: commit: make correction in title in git guide
+b8de8c6 master@{2}: commit: complete content about git in the background for git guide
+bd99722 master@{3}: commit: add content about git behind the scenes to the git guide
+8b0bc79 master@{4}: commit: complete section about tags in git guide
+e66ae76 master@{5}: commit: add content on git tags to the git guide
+3d30605 master@{6}: commit: add content on Typescript
+7c21fe1 master@{7}: clone: from github.com:AldoDominguezCha/LearningNotesAllTopics.git
+```
+
+In this case, we have asked for the reference logs of the master branch, we can see how this branch reference gets updated every time we add a new command to it, since this branch reference must now point to that latest commit.
+
+<div style="page-break-after: always;"></div>
+
+## Git reflogs
+
+We have a more complex scenario, if we try to see the list of updates for the HEAD reference, since with the HEAD reference we can point to different branches and even specific commits (using a different sample repository from the previous example):
+
+```console
+>> git reflog show HEAD
+```
+
+Has an example output:
+
+```console
+6c8e3b6 (HEAD -> eagerLoading, origin/eagerLoading) HEAD@{0}: checkout: moving from master to eagerLoading
+f011641 (origin/master, origin/HEAD, master) HEAD@{1}: checkout: moving from 3739879d657f9680cba96ba36f508839465873e3 to master
+3739879 HEAD@{2}: checkout: moving from master to HEAD~1
+f011641 (origin/master, origin/HEAD, master) HEAD@{3}: checkout: moving from 3739879d657f9680cba96ba36f508839465873e3 to master
+3739879 HEAD@{4}: checkout: moving from master to HEAD~1
+f011641 (origin/master, origin/HEAD, master) HEAD@{5}: checkout: moving from eagerLoading to master
+6c8e3b6 (HEAD -> eagerLoading, origin/eagerLoading) HEAD@{6}: checkout: moving from master to eagerLoading
+f011641 (origin/master, origin/HEAD, master) HEAD@{7}: checkout: moving from eagerLoading to master
+6c8e3b6 (HEAD -> eagerLoading, origin/eagerLoading) HEAD@{8}: checkout: moving from master to eagerLoading
+f011641 (origin/master, origin/HEAD, master) HEAD@{9}: clone: from https://github.com/AldoDominguezCha/SkinetECommerce.git
+```
+
+In this other scenario, we can see how the HEAD reference was updated to point to different branches and even specific commits (detached HEAD state).
+
+Every entry in the reference logs has a timestamp associated with it, we can filter reflog entries by time/date by using time qualifiers. This could be useful if we wanted to travel back to a certain commit in a branch, knowing only the approximate time of creation for that commit, we could reference the corresponding reflog reference for that commit, instead of go looking for its exact hash, as follows:
+
+```console
+>> git checkout master@{2.days.ago}
+```
+
+In this case, the **master@{2.days.ago}** reflog entry referenced will be the one closest to that two weeks period. So it's like asking "where were you, the reference, pointing at, this amount of time ago?".
+
+<div style="page-break-after: always;"></div>
+
 ## Git aliases
 
 > Git aliases are basically shortcuts, little custom commands we can define
