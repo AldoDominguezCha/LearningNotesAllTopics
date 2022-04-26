@@ -249,7 +249,7 @@ Git is a **key-value** data store. We can insert any kind of content into a git 
 
 - ### Git behind the scenes
 
-**Viewing a tree representation in git**
+**Viewing a tree object in git**
 
 We can use the same **git cat-file -p** command to view the tree object that is pointed to by the tip of a certain branch, with the following syntax:
 
