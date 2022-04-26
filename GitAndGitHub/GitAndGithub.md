@@ -233,9 +233,88 @@ As a subset of hashing functions, we can find cryptographic hash functions, whic
 
 At the moment of writing this, git uses a cryptographic hashing function called SHA-1 (this could change in the future). SHA-1 always generates 40-digit hexadecimal numbers, the commit hashes we see all the time in git are the output of this SHA-1 function.
 
-**Git as key-value datastore**
+**Git as a key-value datastore**
 
-Git is a **key-value** data store. We can insert any kind of content into a git repository, and git will hand us back a unique key we can later use to retrieve that content. These keys that we get back are SHA-1 checksums. 
+Git is a **key-value** data store. We can insert any kind of content into a git repository, and git will hand us back a unique key we can later use to retrieve that content. These keys that we get back are SHA-1 checksums.
+
+**git hash-object \<file-name\> -w** &rarr; This command takes the data we pass it, it stores that data in our .git/objects directory and gives us back the unique SHA-1 hash that refers to that data object. The **-w** flag stands for "write", if we do not provide this flag, git will simply return the corresponding SHA-1 hash according to the input data, without actually storing the information in the objects folder.
+
+**git cat-file -p \<object-hash\>** &rarr; After we have stored data in our git object database using **git hash-object -w**, we can retrieve that data by its object hash (like the key in a dictionary). The **-p** flag stands for "pretty", it tells git to pretty print the contents of the object based on its type.
+
+**Blobs**: Git blobs (binary large objects) are the object type Git uses to store the contents of files in a given repository. Blobs don't even include the filenames of each file or any other data. They just store the contents of a file.
+
+**Trees**: Trees are git objects used to store the contents of a directory. Each tree contains pointers that can refer to blobs and to other trees. Each entry in a tree contains the SHA-1 hash of a blob or tree, as well as the mode, type, and filename.
+
+<div style="page-break-after: always;"></div>
+
+- ### Git behind the scenes
+
+**Viewing a tree representation in git**
+
+We can use the same **git cat-file -p** command to view the tree object that is pointed to by the tip of a certain branch, with the following syntax:
+
+```console
+>> git cat-file -p master^{tree}
+```
+
+**Output**
+
+```console
+100644 blob 93d3f9d923e2e296fdaabf45ce1b9f491c15a9d1    .gitignore
+040000 tree 08e279c09d02a194b35b83a532a919a207901468    ASPNETCoreMiscellaneous
+040000 tree b5867aad455c3f2972d88356cbb0fff4f0221289    Angular
+040000 tree bd982ed6a33bf57bf5586be478ea27e6fefde92f    Examples
+040000 tree 11c505e5f13e9f8996bb8ed6d6bb6c076f07c6a0    GitAndGitHub
+040000 tree 34bad7ad5e6d6f0b057351a2684112b4ec115f79    TypeScript
+```
+
+We can see every reference entry in the tree, having the access mode, the type of reference: **blob (contents of a file)** or **tree (a nested folder representation)**, and the name of the reference (name of file when it's a blob reference or name of subfolder when it's a tree reference). This is the way a blob object having the contents of a certain file is related to its corresponding file name in the tree, and how the different subfolders are represented for every commit of every branch in the repository, thinking of a commit as a "snapshot", a different tree structure, where we may find more blob objects or nested trees compared to the prior commit.
+
+**Commits**: Git commit objects combine a tree object along with information about the context that led to the current tree. Commits store a reference to a parent commit(s), the author, the commiter, and of course the commit message.
+
+<p align="center">
+  <img width="40%" height="40%" src="./img/CommitObject.png" />
+</p>
+
+<div style="page-break-after: always;"></div>
+
+- ### Git behind the scenes
+
+**Viewing a commit object in git**
+
+Once again, using the **git cat-file -p**, we can visualize a commit object in git. And also by switching the **-p** flag for **-t** (which stands for "type"), we can see the type of git object which reference we are providing to the command:
+
+```console
+>> git cat-file -t 6f2b566eb5337571a5dd8f7b7e353381bf62c7f7 (a commit hash)
+```
+**Output**
+
+```console
+commit
+```
+
+Now visualizing the git commit object:
+
+```console
+>> git cat-file -p 6f2b566eb5337571a5dd8f7b7e353381bf62c7f7 (a commit hash)
+```
+
+**Output**
+
+```console
+tree fdc08f2765a174774c27742406e8df20a68a93f6
+parent ba611aa3fe628697cf38fbcf5555450955fd5c9c
+author Aldo Dominguez <aldodominguezchz@gmail.com> 1650927219 -0500
+committer Aldo Dominguez <aldodominguezchz@gmail.com> 1650927219 -0500
+```
+
+As we can see, the commit object has its tree reference (the snapshot for the branch for that commit), the hash of its parent commit, the author and the commiter. 
+
+**In summary, a commit object stores the hash corresponding to a tree, that tree for the commit stores the hash references to other trees (nested folders in the repository) and the hash references to blob objects, which are the final node, having only the contents of a file, the name for that file is stored in the tree itself preceeding the blob**.
+
+<p align="center">
+  <img width="25%" height="25%" src="./img/GitTreeModel.png" />
+</p>
 
 <div style="page-break-after: always;"></div>
 
