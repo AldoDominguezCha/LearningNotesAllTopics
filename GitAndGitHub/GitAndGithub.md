@@ -1040,3 +1040,53 @@ The "fork and clone" workflow is most used in open-source projects with hundreds
 
 6. We create a pull request from the feature branch of our fork, targeting the main branch of the project in the original repo
 
+<div style="page-break-after: always;"></div>
+
+## Git aliases
+
+> Git aliases are basically shortcuts, little custom commands we can define
+
+We can create git aliases in two different ways: **Through the config files, wheter it is local or global, and in the command line**.
+
+**Adding the alias directly in the config file** 
+
+If we want to add the alias in the config file, we'll need to to do it in the "alias" section. As an example:
+
+```console
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+
+[alias]
+	lg = log --oneline
+```
+
+Given this **\"lg\"** alias we have added. If we run **git lg**, we get as the output:
+
+```console
+4f40a14 (HEAD -> master) add new dog to the list
+6f2b566 add greeting
+ba611aa initial commit, add dogs file
+```
+
+**Adding the alias through the command line**
+
+This will add the alias in the repository scope only due to the **--local** flag:
+
+```console
+git config --local alias.remotebranches "branch --remote"
+```
+
+Given this **\"remotebranches\"** alias we have added. If we run **git remotebranches**, we get as the output:
+
+```console
+origin/HEAD -> origin/master
+origin/master
+```
+
+Both ways of adding the alias are basically the same thing, appending this new definition under the "alias" section of the config file, so they are not exactly "different" methods, by declaring the alias through the command line we are just editing the config file all the same, so it just becomes a question of which method is more comfortable to use.
+
