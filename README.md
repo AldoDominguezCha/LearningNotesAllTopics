@@ -6,7 +6,8 @@ If by any chance you have stumbled upon this public repository, feel free to tak
 
 **Completed notes**
 
-- Git and Github
+- Git and Github : Notes sinthesized from my interpretation and understanding of Colt Steele's amazing "The Git & Github Bootcamp
+", go check it out! 
 
 **Notes in progress**
 
