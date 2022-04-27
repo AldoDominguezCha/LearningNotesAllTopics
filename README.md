@@ -6,7 +6,7 @@ If by any chance you have stumbled upon this public repository, feel free to tak
 
 **Completed notes**
 
-- Git and Github : Notes sinthesized from my interpretation and understanding of Colt Steele's amazing "The Git & Github Bootcamp" in Udemy, go check it out! [Great Colt's git course](https://www.udemy.com/course/git-and-github-bootcamp)
+- Git and Github : Notes sinthesized from my interpretation and understanding of Colt Steele's amazing "The Git & Github Bootcamp" in Udemy, go check it out! &rarr; [Great Colt's git course](https://www.udemy.com/course/git-and-github-bootcamp)
 
 **Notes in progress**
 
