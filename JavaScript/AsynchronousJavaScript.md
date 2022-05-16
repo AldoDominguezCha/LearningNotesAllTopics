@@ -341,4 +341,86 @@ Just to reiterate, we can see that the *onRejected* handler got executed at the 
 
 <div style="page-break-after: always;"></div>
 
-It's possible to chain multiple promises, thanks to the **.then()** method that returns a promise itself, in the *onFulfillment* function that is the first argument for the .then() method, we need to return a value, and that value will be the resolving/
+It's possible to chain multiple promises, thanks to the **.then()** method that returns a promise itself, in the *onFulfillment* function that is the first argument for the .then() method, we need to return a value, and that value will be the resolving/fulfillment value for the newly created promise, or we can even create a new explicit promise, as shown in the following example:
+
+```js
+function calculateSquarePromise(number) {
+    return new Promise((resolve, reject) => {
+        if (typeof number !== 'number') {
+            return reject(new Error("Argument of type number is expected"));
+        }
+        setTimeout(function() {
+            const result = number * number;
+            resolve(result);
+        }, 1500);
+    })
+}
+
+calculateSquarePromise(2)
+    .then(value => {
+        console.log(`In the first then clause. Value: ${value}`);
+        return calculateSquarePromise(value);
+    })
+    .then(value => {
+        console.log(`In the second then clause. Value: ${value}`);
+        return calculateSquarePromise(value);
+    })
+    .then(value => {
+        console.log(`In the third then clause. Value: ${value}`);
+    })
+```
+
+Output
+
+```console
+In the first then clause. Value: 4
+In the second then clause. Value: 16
+In the third then clause. Value: 256
+```
+
+As we can appreciate, in the first two *.then()* clauses, we are returning new explicit promises, we are invoking *calculateSquarePromise* using the value resolved from the previous promise, thus returning yet a new promise. But as already mentioned, we can simply return a value inside the *.then()* clause to make that our resolving value in this newly created promise, like this:
+
+<div style="page-break-after: always;"></div>
+
+```js
+calculateSquarePromise(2)
+    .then(value => {
+        console.log(`In the first then clause. Value: ${value}`);
+        return 'Hello, I am returninng this as my resolving value';
+    })
+    .then(value => {
+        console.log(`I got this as the resolving value: ${value}`);
+        
+    })
+```
+
+Output
+
+```console
+In the first then clause. Value: 4
+I got this as the resolving value: Hello, I am returninng this as my resolving value
+```
+
+Another thing really worth mentioning, is that the executor body in the promise, and even the *.then()* clause that returns a promise itself both have "invisible" try-catch statements, this means that we don't really need to reject the promise explicitly, if we throw an error inside the executor body or the *.then()* clause, the promise will automatically be rejected for us using that error, as the following example illustrates:
+
+```js
+const myTestPromise = new Promise(function(resolve, reject) {
+    throw new Error('I throwed an error instead of explicitly rejecting!');
+});
+
+myTestPromise.catch(reason => {
+    console.log(`The promise was rejected, ${reason}`);
+})
+```
+
+Output
+
+```console
+The promise was rejected, Error: I throwed an error instead of explicitly rejecting!
+```
+
+<div style="page-break-after: always;"></div>
+
+### Promise.all()
+
+The *Promise.all()* mtehod takes an array or iterable of promises as its argument, and then returns a single promise that resolves to an array of the results of the input promises: This returned promise will resolve when all of the input's promises have resolved, or if the input iterable contains no promises. It rejects inmediately upon any of the input promises rejecting, and will reject with this first rejection message/error.
