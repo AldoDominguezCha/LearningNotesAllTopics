@@ -424,3 +424,199 @@ The promise was rejected, Error: I throwed an error instead of explicitly reject
 ### Promise.all()
 
 The *Promise.all()* mtehod takes an array or iterable of promises as its argument, and then returns a single promise that resolves to an array of the results of the input promises: This returned promise will resolve when all of the input's promises have resolved, or if the input iterable contains no promises. It rejects inmediately upon any of the input promises rejecting, and will reject with this first rejection message/error.
+
+Let's imagine we have 3 HTTP requests, each request will return a buying price for a car based on its characteristics, here we are just mocking these requests using *setTimeout* and resolving the promise with the buying price after some time, we can see that the 3 promises all resolve at different times, but in an scenario like this, we need to have all the buying prices available to make the best choice, in here we can apply *Promise.all*, we'll provide to it the array of promise objects by calling each function and as already mentioned, *Promise.all* returns a promise that resolves only after all of the promises we provided as the argument have been resolved, in the positive scenario:
+
+```js
+function askFirstDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(8000), 3000);
+    });
+}
+
+function askSecondDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(12000), 12000);
+    });
+}
+
+function askThirdDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(10000), 8000);
+    });
+}
+
+Promise.all([askFirstDealer(), askSecondDealer(), askThirdDealer()])
+    .then(result => {
+        console.log(`This is what I got from my promises: ${result}`);
+    })
+```
+
+Output
+
+```console
+This is what I got from my promises: 8000,12000,10000
+```
+
+To get the results, we've waited as long as the slowest promise took to resolve its value (*askSecondDealer* with 12 seconds), because all promises we ran in parallel, and what we got as a result was an array with the resolving values.
+
+<div style="page-break-after: always;"></div>
+
+As already stablished, whenever one of the promises that was passed to *Promise.all* as its argument rejects, *Promise.all* rejects inmediately with that same error/value:
+
+```js
+function askFirstDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(8000), 3000);
+    });
+}
+
+function askSecondDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => reject('Not suitable car'), 5000);
+    });
+}
+
+function askThirdDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(10000), 8000);
+    });
+}
+
+Promise.all([askFirstDealer(), askSecondDealer(), askThirdDealer()])
+    .then(result => {
+        console.log(`This is what I got from my promises: ${result}`);
+    })
+    .catch(reason => {
+        console.log(`Promise.all rejected, the reason: ${reason}`);
+    })
+```
+
+Output
+
+```console
+Promise.all rejected, the reason: Not suitable car
+```
+
+In this case, in the *askSecodDealer* function, the promise was rejected after some time, which in turn caused *Promise.all* to inmediately reject after that single promise was rejected, even when the two other promises would eventually be fulfilled just fine.
+
+<div style="page-break-after: always;"></div>
+
+If we wanted to avoid the behavior that causes *Promise.all* to be rejected as soon as one of the argument promises gets rejected, we can simply add a *.catch()* clause to the original promises like so:
+
+```js
+function askFirstDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(8000), 3000);
+    });
+}
+
+function askSecondDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => reject('Not suitable car'), 5000);
+    });
+}
+
+function askThirdDealer() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(10000), 8000);
+    });
+}
+
+Promise.all([
+        askFirstDealer().catch(error => error), 
+        askSecondDealer().catch( error => error), 
+        askThirdDealer().catch(error => error),
+    ])
+    .then(result => {
+        console.log(`Promise.all resolved with: ${result}`);
+    })
+    .catch(reason => {
+        console.log(`Promise.all rejected, the reason: ${reason}`);
+    })
+```
+
+Output
+
+```console
+This is what I got from my promises: 8000,Not suitable car,10000
+```
+
+This is thank to both *.then()* and *.catch()* returning promises themselves that get fulfilled with whatever value we return from those clauses.
+
+<div style="page-break-after: always;"></div>
+
+### Promise.race()
+
+*Promise.race* is similar to the previously explored *Promise.all*, but *Promise.race* will reolve or reject as fast as the fastest promise that was passed in the argument rejects or resolves, with that same result/error:
+
+```js
+const askJohn = () => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve('Yep, I got an extra pen.'), 3000);
+    });
+}
+
+const askEugene = () => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => reject('Sorry, man, got only one.'), 5000);
+    })
+}
+
+const askSusy = () => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve('Sure, I have a pen for you!'), 2000);
+    })
+}
+
+Promise.race([askJohn(), askEugene(), askSusy()])
+    .then(result => {
+        console.log(`Result from the race: ${result}`);
+    });
+```
+
+Output
+
+```console
+Result from the race: Sure, I have a pen for you!
+```
+
+As we can see, we simply got the result from the fastes promise, wheter said promise gets resolved or rejected.
+
+<div style="page-break-after: always;"></div>
+
+## Async Await in JavaScript
+
+Async/await is a syntactic feature of programming languages that allows an asynchronous function to be structured in a way similar to an ordinary synchronous function.
+
+When we preceed a function with *async*, JS will automatically wrap it as a promise, it doesn't matter if we simply return  a literal value such as a specific string, we'll actually get a promise that resolves to that value. If in turn, inside of the function marked with *async*, we return a *promise*, then no transformation will be applied to that promise.
+
+The *await* keyword is used to wait for a promise to be settled, whether it is rejected or resolved. **Async/Await** is mere syntactic sugar for handling promises.
+
+If we use await to wait for a promise to be settled, and the promise gets rejected, then an error will be thrown automatically. Yet as an additional note, we can't use a top level await (in the main scope of the script) in Node.js unless we have *"type": "module"* in the *package.json* of the project, or our script has a *.mjs* extension (from Node version 14.8 onwards):
+
+```js
+function getSpecificNumber() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => reject(new Error('We have a deliberate error here!')), 2000);
+    });
+}
+
+
+(async function() {
+    try {
+        const myNumber = await getSpecificNumber();
+    } catch (error) {
+        console.log(`The awaited promise got rejected which throwed an error. ${error}`);
+    }
+})();
+```
+
+Output
+
+```console
+The awaited promise got rejected which throwed an error. Error: We have a deliberate error here!
+```
+
+Here we have first the *getSpecificNumber* function declaration,  which returns a promise that gets rejected after the timeout. Then we are declaring
+an anonymous async function that gets called inmediately, in here we are awaiting for the promise coming from *getSpecificNumber*, but since the promise gets rejected, an error gets thrown automatically and we end up in the catch clause. 
