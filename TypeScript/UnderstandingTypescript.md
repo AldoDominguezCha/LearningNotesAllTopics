@@ -230,6 +230,8 @@ function generateError(error : errorContent): never {
 const result = generateError( { message: 'Stack overflow!', code: 500 });
 ```
 
+<div style="page-break-after: always;"></div>
+
 **Void** &rarr; Represents the return type of functions which don't return a value. It's the inferred type any time a function doesn't have any return statement, or doesn't return any explicit value from its return statement.
 
 ```ts
@@ -244,3 +246,4 @@ function addAndPrint(x: number, y: number): void {
 <div style="page-break-after: always;"></div>
 
 ## The TypeScript compiler
+
